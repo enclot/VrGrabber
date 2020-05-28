@@ -2,16 +2,18 @@
 using UnityEngine.Events;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VrGrabber
 {
 
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(OVRHand))]
+    [RequireComponent(typeof(OVRSkeleton))]
 
     public class VrgGrabberHand : VrgGrabber
     {
-        const float grabBeginThreshold = 0.85f;
+        const float grabBeginThreshold = 0.95f;
         const float grabEndThreshold = 0.35f;
         const float minGrabSmoothDist = 0.5f;
         const float maxGrabSmoothDist = 2f;
@@ -19,25 +21,27 @@ namespace VrGrabber
 
 
         private OVRHand ovrHand;
-
-
-        VrgGrabber opposite
-        {
-            get {
-                if (!isGrabbing) {
-                    return null;
-                }
-                return grabInfo_.grabbable.grabbers.Find(grabber => grabber != this);
-            }
-        }
+        private OVRSkeleton ovrSkeleton;
+        private Transform indexTipPos;
+        private Transform colliderPos;
+        //VrgGrabber opposite
+        //{
+        //    get {
+        //        if (!isGrabbing) {
+        //            return null;
+        //        }
+        //        return grabInfo_.grabbable.grabbers.Find(grabber => grabber != (VrgGrabber)this);
+        //    }
+        //}
 
         //public bool isPrimary
         //{
-        //    get
-        //    {
-        //        if (!isGrabbing) return false;
+        //    get {
+        //        if (!isGrabbing)
+        //            return false;
 
-        //        if (!grabInfo_.grabbable.isMultiGrabbed) return true;
+        //        if (!grabInfo_.grabbable.isMultiGrabbed)
+        //            return true;
 
         //        return grabInfo_.id < opposite.grabInfo_.id;
         //    }
@@ -46,6 +50,11 @@ namespace VrGrabber
         private void Start()
         {
             ovrHand = GetComponent<OVRHand>();
+            ovrSkeleton = GetComponent<OVRSkeleton>();
+
+            colliderPos = transform.Find("Collider").transform;
+
+
         }
 
         void Update()
@@ -103,7 +112,16 @@ namespace VrGrabber
         void UpdateTransform()
         {
             if (ovrHand.IsPointerPoseValid) {
+                var bone = ovrSkeleton.Bones
+                    .Single(b => b.Id == OVRSkeleton.BoneId.Hand_IndexTip);
+                indexTipPos = bone.Transform;
+
+                colliderPos.parent = indexTipPos;
+                colliderPos.localPosition = Vector3.zero;
+
+
                 grip = ovrHand.PointerPose;
+                //grip.position = indexTipPos.position;
             }
 
         }
@@ -143,7 +161,6 @@ namespace VrGrabber
 
         void Grab(VrgGrabbable grabbable, float distance)
         {
-            Debug.Log("Grab");
             grabInfo_.grabber = this;
             grabInfo_.grabbable = grabbable;
             grabInfo_.distance = distance;

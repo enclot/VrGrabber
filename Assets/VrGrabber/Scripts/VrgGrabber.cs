@@ -103,6 +103,7 @@ public class VrgGrabber : MonoBehaviour
     }
     protected GrabInfo grabInfo_ = new GrabInfo();
 
+
     protected internal class DualGrabInfo
     {
         public Vector3 primaryToSecondary;
