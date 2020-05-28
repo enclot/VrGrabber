@@ -28,24 +28,24 @@ public class VrgGrabber : MonoBehaviour
     }
 
     [SerializeField]
-    Transform grip = null;
+    protected Transform grip = null;
 
     [SerializeField]
-    VrgTargetLine line;
+    protected VrgTargetLine line;
 
     [SerializeField]
-    float maxGrabDistance = 10f;
+    protected float maxGrabDistance = 10f;
 
     [SerializeField]
-    float stickMoveSpeed = 0.1f;
+    protected float stickMoveSpeed = 0.1f;
 
     [SerializeField]
-    LayerMask layerMask = ~0;
+    protected LayerMask layerMask = ~0;
 
     public class TargetClickEvent : UnityEvent<VrgGrabber, RaycastHit> {}
     public TargetClickEvent onTargetClicked = new TargetClickEvent();
 
-    internal class AverageVelocity
+    protected internal class AverageVelocity
     {
         private const int n = 3;
         private Vector3[] velocities_ = new Vector3[n];
@@ -71,7 +71,7 @@ public class VrgGrabber : MonoBehaviour
         }
     }
 
-    internal class GrabInfo
+    protected internal class GrabInfo
     {
         public int id = -1;
         public VrgGrabber grabber = null;
@@ -101,9 +101,9 @@ public class VrgGrabber : MonoBehaviour
             }
         }
     }
-    GrabInfo grabInfo_ = new GrabInfo();
+    protected GrabInfo grabInfo_ = new GrabInfo();
 
-    internal class DualGrabInfo
+    protected internal class DualGrabInfo
     {
         public Vector3 primaryToSecondary;
         public Vector3 pos;
@@ -111,21 +111,21 @@ public class VrgGrabber : MonoBehaviour
         public Vector3 scale;
         public Quaternion rot;
     }
-    DualGrabInfo dualGrabInfo_ = new DualGrabInfo();
+    protected DualGrabInfo dualGrabInfo_ = new DualGrabInfo();
 
-    internal class CandidateInfo
+    protected internal class CandidateInfo
     {
         public VrgGrabbable grabbable;
         public Collider collider;
         public int refCount = 0;
     }
-    Dictionary<Collider, CandidateInfo> directGrabCandidates_ = new Dictionary<Collider, CandidateInfo>();
+    protected Dictionary<Collider, CandidateInfo> directGrabCandidates_ = new Dictionary<Collider, CandidateInfo>();
 
-    RaycastHit targetHit_;
-    float holdInput_ = 0f;
-    bool isHoldStart_ = false;
-    bool isHoleEnd_ = false;
-    Vector3 preRayDirection_;
+    protected RaycastHit targetHit_;
+    protected float holdInput_ = 0f;
+    protected bool isHoldStart_ = false;
+    protected bool isHoleEnd_ = false;
+    protected Vector3 preRayDirection_;
 
     public Transform gripTransform
     {
