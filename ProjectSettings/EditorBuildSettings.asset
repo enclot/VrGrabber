@@ -8,3 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/VrGrabber/Scenes/VrGrabber Example.unity
     guid: 3ef7984c9ae84fb47996391660d92e3b
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 74ded28ddec8af44589cc9a38d374a0f,
+      type: 2}
