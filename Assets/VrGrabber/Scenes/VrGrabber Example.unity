@@ -1315,6 +1315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAngle: 60
   jointNum: 32
+  startOffset: {x: 0, y: 0, z: 0}
 --- !u!120 &1079325117
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1474,7 +1475,7 @@ MonoBehaviour:
   stickMoveSpeed: 0.1
   layerMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 1
 --- !u!114 &1079325121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2623,7 +2624,7 @@ MonoBehaviour:
   stickMoveSpeed: 0.1
   layerMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 1
 --- !u!114 &1451691335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2668,6 +2669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAngle: 60
   jointNum: 32
+  startOffset: {x: 0, y: 0, z: 0}
 --- !u!120 &1451691338
 LineRenderer:
   m_ObjectHideFlags: 0

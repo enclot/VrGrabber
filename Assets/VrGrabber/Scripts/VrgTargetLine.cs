@@ -13,6 +13,8 @@ public class VrgTargetLine : MonoBehaviour
     public float maxAngle = 60f;
     public int jointNum = 32;
 
+    public Vector3 startOffset = Vector3.zero;
+
     void Awake()
     {
         grabber_ = GetComponent<VrgGrabber>();
@@ -28,7 +30,7 @@ public class VrgTargetLine : MonoBehaviour
         }
         line_.enabled = true;
 
-        var startPos = transform.position;
+        var startPos = transform.position + startOffset;
         var dir = grabber_.gripDir.normalized;
         var to = grabber_.targetPos - startPos;
 

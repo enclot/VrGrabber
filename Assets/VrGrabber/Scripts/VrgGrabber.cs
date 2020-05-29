@@ -40,7 +40,7 @@ namespace VrGrabber
         float maxGrabDistance = 10f;
 
         [SerializeField]
-        float stickMoveSpeed = 0.1f;
+        float stickMoveSpeed = 0.01f;
 
         [SerializeField]
         LayerMask layerMask = ~0;
@@ -195,7 +195,8 @@ namespace VrGrabber
                 ovrSkeleton = GetComponent<OVRSkeleton>();
 
                 colliderPos = transform.Find("Collider").transform;
-
+                line = GetComponent<VrgTargetLine>();
+                
                 initialized = true;
             }
             UpdateInput();
@@ -265,6 +266,7 @@ namespace VrGrabber
                 colliderPos.parent = indexTipPos;
                 colliderPos.localPosition = Vector3.zero;
 
+                line.startOffset = colliderPos.position - line.transform.position;
 
                 grip = ovrHand.PointerPose;
                 //grip.position = indexTipPos.position;
@@ -448,7 +450,9 @@ namespace VrGrabber
             var grabbable = grabInfo_.grabbable;
 
             //var stickY = Device.instance.GetCoord(side).y;
-            var stickY = 0f;
+            var strength = ovrHand.GetFingerPinchStrength(OVRHand.HandFinger.Pinky);
+
+            var stickY = -strength;
             var stickMove = stickY * stickMoveSpeed;
             var stickMoveFilter = stickY > Mathf.Epsilon ? 0.1f : 0.3f;
             grabInfo_.stickMove += (stickMove - grabInfo_.stickMove) * stickMoveFilter;
