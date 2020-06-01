@@ -67,6 +67,11 @@ public class VrgTargetLine : MonoBehaviour
             line_.SetPosition(i, pos);
         }
     }
+
+    public void SetVisible(bool v)
+    {
+        line_.enabled = v;
+    }
 }
 
 }

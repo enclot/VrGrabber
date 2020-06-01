@@ -12,7 +12,7 @@ namespace VrGrabber
     [RequireComponent(typeof(Rigidbody))]
     public class VrgGrabber : MonoBehaviour
     {
-        const float grabBeginThreshold = 0.95f;
+        const float grabBeginThreshold = 0.99f;
         const float grabEndThreshold = 0.35f;
         const float minGrabSmoothDist = 0.5f;
         const float maxGrabSmoothDist = 2f;
@@ -130,7 +130,7 @@ namespace VrGrabber
         private bool initialized = false;
         private OVRHand ovrHand;
         private OVRSkeleton ovrSkeleton;
-        private Transform indexTipPos;
+
         private Transform colliderPos;
 
 
@@ -196,7 +196,11 @@ namespace VrGrabber
 
                 colliderPos = transform.Find("Collider").transform;
                 line = GetComponent<VrgTargetLine>();
-                
+
+                GameObject gripGO = new GameObject("Grip");
+                gripGO.transform.SetParent(transform, false);
+                grip = gripGO.transform;
+
                 initialized = true;
             }
             UpdateInput();
@@ -249,37 +253,31 @@ namespace VrGrabber
             }
         }
 
-        private void InitializeHand()
-        {
-
-        }
 
         void UpdateTransform()
         {
-            //transform.localPosition = Device.instance.GetLocalPosition(side);
-            //transform.localRotation = Device.instance.GetLocalRotation(side);
             if (ovrHand.IsPointerPoseValid) {
-                var bone = ovrSkeleton.Bones
+                var indexTip = ovrSkeleton.Bones
                     .Single(b => b.Id == OVRSkeleton.BoneId.Hand_IndexTip);
-                indexTipPos = bone.Transform;
-
-                colliderPos.parent = indexTipPos;
+                colliderPos.parent = indexTip.Transform;
                 colliderPos.localPosition = Vector3.zero;
 
-                line.startOffset = colliderPos.position - line.transform.position;
+                var thumbTip = ovrSkeleton.Bones
+                    .Single(b => b.Id == OVRSkeleton.BoneId.Hand_ThumbTip);
+
+                //grip.position = Vector3.Lerp(indexTip.Transform.position, thumbTip.Transform.position, 0.5f);
+                //grip.forward = ovrHand.PointerPose.forward;
 
                 grip = ovrHand.PointerPose;
-                //grip.position = indexTipPos.position;
+                line.SetVisible(true);
+                line.startOffset = grip.position - line.transform.position;
+            }else{
+                line.SetVisible(false);
             }
         }
 
         void UpdateInput()
         {
-            //var preHoldInput = holdInput_;
-            //holdInput_ = Device.instance.GetHold(side);
-            //isHoldStart_ = (holdInput_ >= grabBeginThreshold) && (preHoldInput < grabBeginThreshold);
-            //isHoleEnd_ = (holdInput_ <= grabEndThreshold) && (preHoldInput > grabEndThreshold);
-
             var preHoldInput = holdInput_;
             holdInput_ = ovrHand.GetFingerPinchStrength(OVRHand.HandFinger.Index);
 
@@ -301,6 +299,7 @@ namespace VrGrabber
         void UpdateTouch()
         {
             var forward = gripTransform.forward;
+ 
 
             var ray = new Ray();
             ray.origin = gripTransform.position;
@@ -450,7 +449,7 @@ namespace VrGrabber
             var grabbable = grabInfo_.grabbable;
 
             //var stickY = Device.instance.GetCoord(side).y;
-            var strength = ovrHand.GetFingerPinchStrength(OVRHand.HandFinger.Pinky);
+            var strength = ovrHand.GetFingerPinchStrength(OVRHand.HandFinger.Ring);
 
             var stickY = -strength;
             var stickMove = stickY * stickMoveSpeed;

@@ -9,5 +9,7 @@ EditorBuildSettings:
     path: Assets/VrGrabber/Scenes/VrGrabber Example.unity
     guid: 3ef7984c9ae84fb47996391660d92e3b
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 1c970031ff05fb54f9e54567cc833fb0,
+      type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 74ded28ddec8af44589cc9a38d374a0f,
       type: 2}
